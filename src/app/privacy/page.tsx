@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function PrivacyPage() {
   return (
-    <main className="relative z-10 bg-background min-h-screen pt-32 pb-20 px-4 md:px-6">
+    <main id="main-content" className="relative z-10 bg-background min-h-screen pt-32 pb-20 px-4 md:px-6">
       <div className="max-w-[90rem] mx-auto">
         <div className="max-w-3xl mx-auto">
           <motion.header
@@ -24,7 +24,7 @@ export default function PrivacyPage() {
               Privacy Policy
             </h1>
             <p className="text-white/60 text-sm font-light">
-              Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+              Last updated: June 2026
             </p>
           </motion.header>
 

@@ -86,15 +86,23 @@ export default function Services() {
               <motion.div
                 key={index}
                 ref={(el) => { serviceRefs.current[index] = el }}
+                role="button"
+                tabIndex={0}
                 onMouseEnter={() => {
-                  // Keep hover effect for desktop
                   if (window.innerWidth >= 1024) {
                     setActiveService(index);
                   }
                 }}
                 onClick={() => setActiveService(index)}
-                className={`group service-${index} relative border-b border-white/10 transition-all duration-500 cursor-pointer hover:opacity-100 ${isActive ? 'py-8 md:py-12 opacity-100' : 'py-6 md:py-8 opacity-40'}`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveService(index);
+                  }
+                }}
+                className={`group service-${index} relative border-b border-white/10 transition-[padding,opacity] duration-500 cursor-pointer hover:opacity-100 focus-ring rounded-sm ${isActive ? 'py-8 md:py-12 opacity-100' : 'py-6 md:py-8 opacity-40'}`}
                 data-hover="true"
+                aria-expanded={isActive}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-6 md:gap-12 w-full md:w-auto">

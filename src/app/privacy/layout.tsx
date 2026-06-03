@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Privacy Policy",
-  description: "Zero1 Studio privacy policy – how we collect, use, and protect your data.",
-};
+  description:
+    "How Zero1 Studio collects, uses, and protects your data when you use our website and services.",
+  path: "/privacy",
+});
 
 export default function PrivacyLayout({
   children,

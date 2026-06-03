@@ -5,6 +5,7 @@
   --surface: #0a0a0a;
   --accent: #d4ff00;
   --secondary: #ffffff;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -14,17 +15,70 @@
   --color-secondary: var(--secondary);
   --font-sans: var(--font-plus_jakarta_sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
-  --cursor-none: none;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  cursor: none;
   background-color: #050505;
+  color: #ffffff;
   overflow-x: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-a, button, [role="button"] {
-  cursor: none;
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  border-radius: 9999px;
+  background: var(--accent);
+  color: #000;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
 }
 
 /* Custom Scrollbar - Minimal */
@@ -49,11 +103,7 @@ a, button, [role="button"] {
   color: transparent;
 }
 
-
-/* ------------------------------------ */
-/* lenis  */
-/* ------------------------------------ */
-
+/* lenis */
 html.lenis,
 html.lenis body {
   height: auto;

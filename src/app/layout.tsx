@@ -1,92 +1,79 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Syne } from "next/font/google";
-import "./globals.css";
-import Navbar from "../components/Navbar";
-import CustomCursor from "../components/CustomCursor";
-import Footer from "../components/Footer";
 import Script from "next/script";
+import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import { DeferredUI } from "@/components/deferred-ui";
+import { JsonLd } from "@/components/json-ld";
+import { organizationJsonLd, webSiteJsonLd } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
 
 const plus_jakarta_sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-plus_jakarta_sans",
+  display: "swap",
 });
 
 const syne = Syne({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-syne",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Zero1 Studio | Website Development, MVP, 3D Experiences & E-commerce Solutions",
-    template: "%s | Zero1 Studio – Premium Web Development Agency",
+    default:
+      "Zero1 Studio | Website Development, MVP, 3D Experiences & E-commerce",
+    template: "%s | Zero1 Studio",
   },
-  description:
-    "Zero1 Studio – Expert website development company building high-performance MVPs, interactive 3D web experiences, custom e-commerce sites, and intelligent web solutions. From idea to launch – fast, scalable, and conversion-focused.",
+  description: siteConfig.description,
   keywords: [
-    "zero1studio.xyz",
-    "zero1studio",
     "zero1 studio",
-    "zero1 studio xyz",
-    "zero1 studio website development",
-    "zero1 studio mvp development",
-    "zero1 studio 3d web experience",
-    "zero1 studio ecommerce development",
-    "zero1 studio web development company",
-    "zero1 studio startup mvp",
-    "zero1 studio next.js development",
     "website development",
-    "web development company",
     "mvp development",
-    "mvp development company",
     "3d web experience",
-    "3d website",
-    "interactive 3d experience",
     "ecommerce development",
-    "e commerce site",
-    "custom ecommerce solutions",
     "next.js development",
-    "web application development",
-    "startup mvp",
+    "web development agency",
   ],
-  authors: [{ name: "Zero1 Studio", url: "https://zero1studio.xyz" }],
-  creator: "Zero1 Studio",
-  publisher: "Zero1 Studio",
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://zero1studio.xyz"),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "/",
-    siteName: "Zero1 Studio",
-    title: "Zero1 Studio | Website Development, MVP, 3D Experiences & E-commerce",
-    description:
-      "Professional website development agency specializing in fast MVP builds, immersive 3D web experiences, powerful e-commerce platforms, and modern web solutions.",
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title:
+      "Zero1 Studio | Website Development, MVP, 3D Experiences & E-commerce",
+    description: siteConfig.description,
     images: [
       {
-        url: "/og-image.jpg", // ← make sure this image clearly shows "Zero1 Studio" + services
+        url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: "Zero1 Studio - Website Development, MVP, 3D Web Experiences & E-commerce Solutions",
+        alt: "Zero1 Studio — web development, MVP, 3D & e-commerce",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Zero1 Studio | Website, MVP, 3D & E-commerce Development",
-    description:
-      "Build your vision with Zero1 Studio: high-performance websites, startup MVPs, interactive 3D experiences, and conversion-driven e-commerce platforms.",
-    images: ["/og-image.jpg"],
-    creator: "@pixelflowui", // ← update to your real handle if different (you had @zero1studio before)
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
+    creator: siteConfig.twitter,
   },
   robots: {
     index: true,
@@ -99,8 +86,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  // Add once you have them
-  // verification: { google: "your-code-here" },
+  category: "technology",
 };
 
 export default function RootLayout({
@@ -109,23 +95,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const websiteId = process.env.SILENT_PULSE_WEBSITE_ID;
+
   return (
     <html lang="en" className="scroll-smooth">
-      <head>
-        {/* Optional: add favicon, manifest, etc. */}
-        <link rel="icon" href="/favicon.ico" />
-        <Script src="https://silentpulse.vercel.app/script.js" data-website-id={websiteId} strategy="afterInteractive" />
-      </head>
-      <body className={`${plus_jakarta_sans.variable} ${syne.variable} font-sans antialiased`}>
+      <body
+        className={`${plus_jakarta_sans.variable} ${syne.variable} font-sans antialiased`}
+      >
+        <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <div className="relative min-h-screen bg-background">
-          <CustomCursor />
-          <div className="fixed inset-0 z-[1] pointer-events-none opacity-[0.04] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+          <DeferredUI />
+          <div
+            className="fixed inset-0 z-[1] pointer-events-none opacity-[0.04] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"
+            aria-hidden="true"
+          />
           <Navbar />
           {children}
           <div className="fixed bottom-0 left-0 right-0 z-0 h-screen">
             <Footer />
           </div>
         </div>
+        {websiteId ? (
+          <Script
+            src="https://silentpulse.vercel.app/script.js"
+            data-website-id={websiteId}
+            strategy="afterInteractive"
+          />
+        ) : null}
       </body>
     </html>
   );

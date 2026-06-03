@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Legal",
-  description: "Zero1 Studio terms of service and legal information.",
-};
+  description:
+    "Zero1 Studio terms of service, intellectual property, and legal information.",
+  path: "/legal",
+});
 
 export default function LegalLayout({
   children,

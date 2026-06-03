@@ -78,8 +78,11 @@ export default function Pricing() {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative flex-1 md:flex-none px-4 md:px-6 py-3 md:py-2 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-colors duration-300 ${activeTab === tab.id ? "text-black" : "text-white/60 hover:text-white"}`}
+                className={`relative flex-1 md:flex-none px-4 md:px-6 py-3 md:py-2 rounded-full text-xs md:text-sm font-bold uppercase tracking-wider transition-colors duration-300 focus-ring touch-manipulation ${activeTab === tab.id ? "text-black" : "text-white/60 hover:text-white"}`}
               >
                 {activeTab === tab.id && (
                   <motion.div
