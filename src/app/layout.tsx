@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     title: "Zero1 Studio | Website, MVP, 3D & E-commerce Development",
     description: siteConfig.description,
     images: [siteConfig.ogImage],
-    creator: siteConfig.twitter,
+    // creator: siteConfig.twitter,
   },
   robots: {
     index: true,

@@ -47,7 +47,7 @@ export function createPageMetadata({
       title: pageTitle,
       description,
       images: [imageUrl],
-      creator: siteConfig.twitter,
+      // creator: siteConfig.twitter,
     },
     robots: noIndex
       ? { index: false, follow: false }
