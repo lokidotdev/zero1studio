@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import AppLoader from "@/components/app-loader";
 import { DeferredUI } from "@/components/deferred-ui";
 import { JsonLd } from "@/components/json-ld";
 import { organizationJsonLd, webSiteJsonLd } from "@/lib/seo";
@@ -101,6 +102,7 @@ export default function RootLayout({
       <body
         className={`${plus_jakarta_sans.variable} ${syne.variable} font-sans antialiased`}
       >
+        <AppLoader />
         <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
         <a href="#main-content" className="skip-link">
           Skip to main content

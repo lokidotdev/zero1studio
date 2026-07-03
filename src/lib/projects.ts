@@ -10,16 +10,6 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: "Dwello",
-    category: "Web Development / Web Design",
-    year: "2026",
-    image: "/images/dwello.png",
-    link: "https://dwello.zero1studio.xyz",
-    isCompleted: true,
-    description:
-      "High-fidelity mockup — UI design and front-end development for a property platform concept, focused on layout, visuals, and brand presentation.",
-  },
-  {
     title: "Friends Of The Future",
     category: "Web Development",
     year: "2024",
@@ -28,6 +18,27 @@ export const projects: Project[] = [
     link: "https://fotf-frontend.vercel.app",
     description:
       "Community-driven site for a creative collective — fast, accessible, and tuned for events and storytelling.",
+  },
+  {
+    title: "Montreal",
+    isCompleted: true,
+
+    category: "Web Development / Motion Design",
+    year: "2026",
+    image: "/images/montreal.png",
+    link: "https://montreal-clone.vercel.app/",
+    description:
+      "Clone of the award-winning Montreal agency site — recreating its signature smooth scrolling, scroll-triggered reveals, typography, and micro-interactions with a focus on performance and responsiveness. Built with Next.js, Motion, and Tailwind CSS.",
+  },
+  {
+    title: "Dwello",
+    category: "Web Development / Web Design",
+    year: "2026",
+    image: "/images/dwello.png",
+    link: "https://dwello.zero1studio.xyz",
+    isCompleted: true,
+    description:
+      "High-fidelity mockup — UI design and front-end development for a property platform concept, focused on layout, visuals, and brand presentation.",
   },
   {
     title: "Stocklit",
@@ -39,6 +50,7 @@ export const projects: Project[] = [
     description:
       "Community-driven site for a creative collective — fast, accessible, and tuned for events and storytelling.",
   },
+
   {
     title: "Homie",
     isCompleted: true,
@@ -82,5 +94,5 @@ export const projects: Project[] = [
     link: "https://enipp.com",
     description:
       "Immersive WebXR experience blending 3D interaction with a polished marketing site for a next-gen product launch.",
-  },
+  }
 ];

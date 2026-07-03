@@ -1,39 +1,103 @@
-
 "use client";
 
-import React, { useRef, useEffect } from "react";
-import { useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
-const Loader = () => {
+interface LoaderProps {
+  onComplete?: () => void;
+}
+
+const Loader = ({ onComplete }: LoaderProps) => {
   const textRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState(false);
   const [loadingPercentage, setLoadingPercentage] = useState(0);
   const [initialAdjustment, setInitialAdjustment] = useState(0);
 
   useEffect(() => {
     if (textRef.current) {
-      setInitialAdjustment((textRef.current as HTMLElement).offsetWidth);
+      setInitialAdjustment(textRef.current.offsetWidth);
     }
-  });
-
-  useEffect(() => {
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i === 100) {
-        setLoading(false);
-      }
-      setLoadingPercentage((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + 1;
-      });
-      i++;
-    }, 50);
-
-    return () => clearInterval(interval);
   }, []);
+
+  // Percentage reflects real asset loading only — no fake pacing.
+  useEffect(() => {
+    let mounted = true;
+
+    // Only wait on images that will actually load up-front. Lazy images
+    // (Next.js <Image>, loading="lazy") don't load until scrolled into view,
+    // so counting them would leave the loader stuck below 100%.
+    const imgs = Array.from(document.images).filter(
+      (img) => img.loading !== "lazy",
+    );
+    const total = imgs.length;
+    let loaded = 0;
+    let windowLoaded = false;
+    let forced = false;
+
+    const update = () => {
+      if (!mounted) return;
+      if (forced) {
+        setLoadingPercentage(100);
+        return;
+      }
+      // images account for up to 90%, the window 'load' event covers the last 10%
+      const imgProgress = total > 0 ? (loaded / total) * 90 : 90;
+      const next = Math.min(
+        100,
+        Math.round(imgProgress + (windowLoaded ? 10 : 0)),
+      );
+      setLoadingPercentage((prev) => Math.max(prev, next));
+    };
+
+    const onAsset = () => {
+      loaded += 1;
+      update();
+    };
+
+    imgs.forEach((img) => {
+      if (img.complete) {
+        onAsset();
+      } else {
+        img.addEventListener("load", onAsset);
+        img.addEventListener("error", onAsset);
+      }
+    });
+
+    const finish = () => {
+      windowLoaded = true;
+      update();
+    };
+
+    if (document.readyState === "complete") {
+      finish();
+    } else {
+      window.addEventListener("load", finish);
+    }
+
+    // Safety net: never let the loader hang. Force completion after 6s no
+    // matter what, so a slow/never-firing asset can't trap the user.
+    const failsafe = setTimeout(() => {
+      forced = true;
+      update();
+    }, 6000);
+
+    update();
+
+    return () => {
+      mounted = false;
+      clearTimeout(failsafe);
+      imgs.forEach((img) => {
+        img.removeEventListener("load", onAsset);
+        img.removeEventListener("error", onAsset);
+      });
+      window.removeEventListener("load", finish);
+    };
+  }, []);
+
+  // fire completion once we reach 100 (kept out of render/updater)
+  useEffect(() => {
+    if (loadingPercentage >= 100) {
+      onComplete?.();
+    }
+  }, [loadingPercentage, onComplete]);
 
   const textAdjustment = initialAdjustment * (1 - loadingPercentage / 100);
 
